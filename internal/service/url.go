@@ -6,7 +6,7 @@ import (
 	"math/big"
 	"time"
 
-	"github.com/doomAbG/url-shortener/internal/domain"
+	"github.com/doomaAbG/url-shortener/internal/domain"
 )
 
 type URLService struct {

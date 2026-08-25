@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"net/http"
 
-	"github.com/doomAbG/url-shortener/internal/service"
+	"github.com/doomaAbG/url-shortener/internal/service"
 	"github.com/go-chi/chi/v5"
 )
 

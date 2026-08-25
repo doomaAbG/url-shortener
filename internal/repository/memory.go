@@ -5,7 +5,7 @@ import (
 	"errors"
 	"sync"
 
-	"github.com/doomAbG/url-shortener/internal/domain"
+	"github.com/doomaAbG/url-shortener/internal/domain"
 )
 
 var ErrNotFound = errors.New("url not found")

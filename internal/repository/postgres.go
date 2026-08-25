@@ -8,14 +8,14 @@ import (
 	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgxpool"
 
-	"github.com/doomAbG/url-shortener/internal/domain"
+	"github.com/doomaAbG/url-shortener/internal/domain"
 )
 
 type PostgresRepo struct {
 	pool *pgxpool.Pool
 }
 
-func NewPostgresRepo(ctx context.Context, connString string) (*PostgresRepo, error) {
+func NewPostgres(ctx context.Context, connString string) (*PostgresRepo, error) {
 	pool, err := pgxpool.New(ctx, connString)
 	if err != nil {
 		return nil, fmt.Errorf("unable to connect to database: %w", err)
@@ -23,22 +23,6 @@ func NewPostgresRepo(ctx context.Context, connString string) (*PostgresRepo, err
 
 	if err := pool.Ping(ctx); err != nil {
 		return nil, fmt.Errorf("unable to ping database: %w", err)
-	}
-
-	// Создаем таблицу, если ее нет
-	query := `
-	CREATE TABLE IF NOT EXISTS urls (
-		id SERIAL PRIMARY KEY,
-		original_url TEXT NOT NULL,
-		alias VARCHAR(20) UNIQUE NOT NULL,
-		created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
-	);
-	CREATE INDEX IF NOT EXISTS idx_urls_alias ON urls(alias);
-	`
-
-	_, err = pool.Exec(ctx, query)
-	if err != nil {
-		return nil, fmt.Errorf("failed to create table: %w", err)
 	}
 
 	return &PostgresRepo{pool: pool}, nil
@@ -69,5 +53,7 @@ func (r *PostgresRepo) GetByAlias(ctx context.Context, alias string) (*domain.UR
 }
 
 func (r *PostgresRepo) Close() {
-	r.pool.Close()
+	if r.pool != nil {
+		r.pool.Close()
+	}
 }
