@@ -18,8 +18,9 @@ import (
 func main() {
 	ctx := context.Background()
 	cfg := config.Load()
-
-	// Инициализируем Postgres репозиторий вместо MemoryRepo
+	if err := repository.RunMigrations(cfg.DBURL); err != nil {
+		log.Fatalf("Migration failed: %v", err)
+	}
 	repo, err := repository.NewPostgresRepo(ctx, cfg.DBURL)
 	if err != nil {
 		log.Fatalf("Failed to initialize postgres repo: %v", err)
